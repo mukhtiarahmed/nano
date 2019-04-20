@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: product-service
+
+server:
+  port: 8080
+  servlet:
+    context-path: /product
+
+
+
+eureka:
+    client:
+      serviceUrl:
+        defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+    instance:
+      preferIpAddress: true
+
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000000
+
+
+
