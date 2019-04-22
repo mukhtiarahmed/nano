@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -40,10 +41,20 @@ public class ProductController {
 
     @GetMapping("/products")
     public List<Product> getProductList() {
-        Map<Integer, List<ReviewDTO>> reviews = reviewClient.getProductReviews();
+        Map<Integer, List<ReviewDTO>> reviews =  getReviews();
         for (Product product : productList) {
             product.setReviews(reviews.get(product.getId()));
         }
         return  productList;
     }
+    
+    
+   private  Map<Integer, List<ReviewDTO>> getReviews() {
+	   try {
+		   return reviewClient.getProductReviews();
+	   }catch(Exception e) {
+		   return Collections.emptyMap();
+	   }
+	   
+   }
 }

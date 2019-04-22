@@ -1,0 +1,73 @@
+version: '2.2'
+services:
+  
+    eureka-server:
+        container_name: eureka-server       
+        image: eureka-server:latest
+        expose:
+            - 8761
+        ports:
+            - 8761:8761
+        networks:
+            - nano-network
+            
+    gateway-server:
+        container_name: gateway-server      
+        image:  gateway-server:latest     
+        expose:
+            - 4000
+        ports:
+            - 4000:4000
+        environment:
+            - JAVA_OPTS=
+                -DEUREKA_URI=http://eureka-server:8761/eureka
+        networks:
+            - nano-network
+        links:          
+            - eureka-server:eureka-server
+        depends_on:          
+            - eureka-server        
+        logging:
+            driver: json-file
+
+    product-service:
+        container_name: product-service      
+        image:  product-service:latest     
+        expose:
+            - 8000
+        ports:
+            - 8000:8000
+        environment:
+            - JAVA_OPTS=
+                -DEUREKA_URI=http://eureka-server:8761/eureka
+        networks:
+            - nano-network
+        links:          
+            - eureka-server:eureka-server
+        depends_on:          
+            - eureka-server        
+        logging:
+            driver: json-file
+
+    review-service:
+        container_name: review-service      
+        image:  review-service:latest     
+        expose:
+            - 9000
+        ports:
+            - 9000:9000
+        environment:
+            - JAVA_OPTS=
+                -DEUREKA_URI=http://eureka-server:8761/eureka
+        networks:
+            - nano-network
+        links:          
+            - eureka-server:eureka-server
+        depends_on:          
+            - eureka-server        
+        logging:
+            driver: json-file
+networks:
+    nano-network:
+        driver: bridge
+        
